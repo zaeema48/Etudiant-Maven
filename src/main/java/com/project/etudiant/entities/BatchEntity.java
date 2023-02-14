@@ -3,19 +3,22 @@ package com.project.etudiant.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NonNull;
-import org.springframework.data.annotation.Id;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Table(name = "BatchTable")
 @Data
 @Getter
+@DynamicUpdate
 public class BatchEntity {
-  @Id
+
   @Column(name = "BatchID")
+  @Id
   String batchId;
   @NonNull
   String courseName;
@@ -27,4 +30,8 @@ public class BatchEntity {
   String feesAmount;
 
   String scheduleId;
+
+  public BatchEntity() {
+    batchId = null;
+  }
 }
