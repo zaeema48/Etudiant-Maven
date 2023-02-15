@@ -13,7 +13,6 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @Table(name = "BatchTable")
 @Data
-@Getter
 @DynamicUpdate
 public class BatchEntity {
 
