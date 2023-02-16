@@ -1,13 +1,7 @@
 package com.project.etudiant.services;
 
-import com.project.etudiant.dao.BatchRepository;
-import com.project.etudiant.dao.NotificationRepository;
-import com.project.etudiant.dao.ScheduleRepository;
-import com.project.etudiant.dao.TeacherRepository;
-import com.project.etudiant.entities.BatchEntity;
-import com.project.etudiant.entities.NotificationEntity;
-import com.project.etudiant.entities.ScheduleEntity;
-import com.project.etudiant.entities.TeacherEntity;
+import com.project.etudiant.dao.*;
+import com.project.etudiant.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +21,27 @@ public class AdminServices {
 
     @Autowired
     TeacherRepository teacherRepository;
+
+    @Autowired
+    SubjectRepository subjectRepository;
+
+    @Autowired
+    AdminRepository adminRepository;
+
+    //This method is checking whether admin exists or not/ whether password is correct or not
+    public void adminLogin(String adminId, String password){
+        AdminEntity admin= null;
+        admin=adminRepository.findByAdminIdAndPassword(adminId, password);
+        if(admin!=null)
+            System.out.println("Successful login!!!");
+        else
+            System.out.println("Admin not found!!!!!");
+    }
+
+    public void addAdmin(AdminEntity admin){
+
+        adminRepository.save(admin);
+    }
    public void addBatch(BatchEntity batch){
        batch.setBatchId(batch.getCourseName()+batch.getCourseYear());
        batchRepository.save(batch);
@@ -81,4 +96,32 @@ public class AdminServices {
        allTeachers=teacherRepository.findAll();
        return allTeachers;
    }
+
+   public void removeTeacher(int teacherId){
+//       TeacherEntity teacher= teacherRepository.findByTeacherId(teacherId);
+//       teacherRepository.delete(teacher);
+       teacherRepository.deleteById(teacherId);
+   }
+
+   public void updateTeacherSalary(int teacherId, String salary){
+       TeacherEntity teacher=teacherRepository.findByTeacherId(teacherId);
+       teacher.setSalary(salary);
+       teacherRepository.save(teacher);
+   }
+
+   public void addSubjects(SubjectEntity subject){
+       subjectRepository.save(subject);
+   }
+
+   public List<SubjectEntity> allSubjects(){
+       List<SubjectEntity> subjectList= new ArrayList<>();
+       subjectList=subjectRepository.findAll();
+       return subjectList;
+   }
+
+   public void removeSubject(int subjectId){
+       subjectRepository.deleteById(subjectId);
+   }
+
+
 }
