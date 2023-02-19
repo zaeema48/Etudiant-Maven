@@ -30,6 +30,9 @@ public class BatchEntity {
 
   String scheduleId;
 
+  @NonNull
+  String currentSemester;
+
   public BatchEntity() {
     batchId = null;
   }

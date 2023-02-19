@@ -28,6 +28,12 @@ public class AdminServices {
     @Autowired
     AdminRepository adminRepository;
 
+    @Autowired
+    StudentRepository studentRepository;
+
+    @Autowired
+    ExamScheduleRepository examScheduleRepository;
+
     //This method is checking whether admin exists or not/ whether password is correct or not
     public void adminLogin(String adminId, String password){
         AdminEntity admin= null;
@@ -121,6 +127,49 @@ public class AdminServices {
 
    public void removeSubject(int subjectId){
        subjectRepository.deleteById(subjectId);
+   }
+
+   public void addStudent(StudentEntity student){
+        studentRepository.save(student);
+   }
+
+   public List<StudentEntity> fetchStudentList(){
+        List<StudentEntity> studentList= new ArrayList<>();
+        studentList=studentRepository.findAll();
+        return studentList;
+   }
+
+   public StudentEntity fetchStudentById(int id){
+        StudentEntity student = studentRepository.findByStudentId(id);
+        return student;
+   }
+
+   public void removeStudent(int id){
+        studentRepository.deleteById(id);
+   }
+
+   public void updateFeesStatus(int id){
+        StudentEntity student= studentRepository.findByStudentId(id); //fetching student object by its id
+        student.setFeesPaid(true);  //updating fees status in student obj (local not in table)
+        studentRepository.save(student); //updating in table
+   }
+
+   public List<StudentEntity> fetchStudentBatch(String batchId){
+        List<StudentEntity> studentBatch = new ArrayList<> ();
+        studentBatch = studentRepository.findByBatchId(batchId);
+        return studentBatch;
+   }
+
+   public void addExamSchedule(List<ExamScheduleEntity> examSchedule){
+        for(int i=0; i<examSchedule.size(); i++){
+            examScheduleRepository.save(examSchedule.get(i));
+        }
+   }
+
+   public List<ExamScheduleEntity> fetchExamSchedule(String batchId){
+        List<ExamScheduleEntity> schedule = new ArrayList <> ();
+        schedule = examScheduleRepository.findByExamSchedule(batchId);
+        return schedule;
    }
 
 

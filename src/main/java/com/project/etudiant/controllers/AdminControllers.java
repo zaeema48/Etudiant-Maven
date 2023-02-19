@@ -94,4 +94,46 @@ public class AdminControllers {
     public void deleting_subject(@RequestParam int subjectId){
         adminServices.removeSubject(subjectId);
     }
+
+    @PostMapping("/add_student")
+    public void adding_student(@RequestBody StudentEntity student){
+        adminServices.addStudent(student);
+    }
+
+    @GetMapping("/fetch_student_list")
+    public List<StudentEntity> studentList (){
+        return adminServices.fetchStudentList();
+    }
+
+    @GetMapping("/find_student")
+    public StudentEntity findingStudent(@RequestParam int sId){
+        return adminServices.fetchStudentById(sId);
+    }
+
+    @DeleteMapping("/remove_student")
+    public void removeStudent(@RequestParam int id){
+        adminServices.removeStudent(id);
+    }
+
+    @PutMapping("/update_fees_status")
+    public void updateFees(@RequestParam int id){
+        adminServices.updateFeesStatus(id);
+    }
+
+    @GetMapping("/fetch_batch")
+    public List<StudentEntity> fetching_batch(@RequestParam String batchId){
+        return adminServices.fetchStudentBatch(batchId);
+    }
+
+    @PostMapping("/add_exam_schedule")
+    public void addingExamSchedule(@RequestBody List<ExamScheduleEntity> examSchedule){
+        adminServices.addExamSchedule(examSchedule);
+    }
+
+    @GetMapping("/fetch_exam_schedule")
+    public List<ExamScheduleEntity> fetchingExamSchedule(@RequestParam String batchId){
+        return adminServices.fetchExamSchedule(batchId);
+    }
+
+
 }
