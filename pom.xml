@@ -41,12 +41,6 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
-		<!--		<dependency>-->
-		<!--			<groupId>org.apache.tomcat</groupId>-->
-		<!--			<artifactId>tomcat-jasper</artifactId>-->
-		<!--			<version>9.0.62</version>-->
-		<!--		</dependency>-->
-
 <!--		for annotations-->
 		<dependency>
 			<groupId>org.projectlombok</groupId>

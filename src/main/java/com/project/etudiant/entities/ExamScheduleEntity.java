@@ -1,21 +1,21 @@
 package com.project.etudiant.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
+@Table(name = "exam_schedule")
 @Data
 @DynamicUpdate
-@Table(name = "exam_schedule")
 @NoArgsConstructor
 public class ExamScheduleEntity {
     @Id
-    String examId; //subject-batch
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exam_id_generator")
+    @SequenceGenerator(name = "exam_id_generator", initialValue = 8000, allocationSize = 7, sequenceName= "exam_id_table")
+    String examId;
 
     @NonNull
     String date;
@@ -29,6 +29,4 @@ public class ExamScheduleEntity {
     @NonNull
     String roomAllotted;
 
-    @NonNull
-    String batchId;
 }

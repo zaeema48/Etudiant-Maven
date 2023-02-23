@@ -65,34 +65,58 @@ public class AdminServices {
        return batch;
    }
 
-
-
-   public void addNotification(NotificationEntity notification){
-       notificationRepository.save(notification);
-   }
-
-   public NotificationEntity searchNotification(String title){
-       NotificationEntity notification;
-       notification= notificationRepository.findByNotificationTitle(title);
-       return notification;
-   }
-
-   public List<NotificationEntity> showAllNotifications(){
-       List<NotificationEntity> notifications = new ArrayList<>();
-       notifications= notificationRepository.findAll();
-       return notifications;
-   }
-
-    public void addSchedules(ScheduleEntity schedule){
-        schedule.setScheduleId(schedule.getCommonId()+schedule.getDay());
+   public void updateSchedule(String batchId, ScheduleEntity schedule){
+        String day=schedule.getDay();
+        ScheduleEntity schedule1=scheduleRepository.findByBatchIdAndDay(batchId,day);
+        schedule.setScheduleId(schedule1.getScheduleId());
         scheduleRepository.save(schedule);
+   }
+    public void addStudent(String batchId,StudentEntity student){
+        BatchEntity batch=batchRepository.findByBatchId(batchId);
+        List<StudentEntity> studentList=batch.getStudentList();
+        studentList.add(student);
+//        studentRepository.saveAll(studentList);
+        batchRepository.save(batch);
     }
 
-   public void updateSchedule(ScheduleEntity schedule){
-        schedule.setScheduleId(schedule.getCommonId()+schedule.getDay());
-        scheduleRepository.save(schedule);
-   }
+    public List<StudentEntity> fetchStudentList(){
+        List<StudentEntity> studentList= new ArrayList<>();
+        studentList=studentRepository.findAll();
+        return studentList;
+    }
 
+    public StudentEntity fetchStudentById(int id){
+        StudentEntity student = studentRepository.findByStudentId(id);
+        return student;
+    }
+
+    public void removeStudent(int id){
+        studentRepository.deleteById(id);
+    }
+
+    public void updateFeesStatus(int id){
+        StudentEntity student= studentRepository.findByStudentId(id); //fetching student object by its id
+        student.setFeesPaid(true);  //updating fees status in student obj (local not in table)
+        studentRepository.save(student); //updating in table
+    }
+
+    public List<StudentEntity> fetchStudentBatch(String batchId){
+        List<StudentEntity> studentBatch = new ArrayList<> ();
+        studentBatch = studentRepository.findByBatchId(batchId);
+        return studentBatch;
+    }
+
+    public void addExamSchedule(List<ExamScheduleEntity> examSchedule){
+        for(int i=0; i<examSchedule.size(); i++){
+            examScheduleRepository.save(examSchedule.get(i));
+        }
+    }
+
+    public List<ExamScheduleEntity> fetchExamSchedule(String batchId){
+        List<ExamScheduleEntity> schedule = new ArrayList <> ();
+        schedule = examScheduleRepository.findByExamSchedule(batchId);
+        return schedule;
+    }
    public void addTeacher(TeacherEntity teacher){
        teacherRepository.save(teacher);
    }
@@ -104,8 +128,6 @@ public class AdminServices {
    }
 
    public void removeTeacher(int teacherId){
-//       TeacherEntity teacher= teacherRepository.findByTeacherId(teacherId);
-//       teacherRepository.delete(teacher);
        teacherRepository.deleteById(teacherId);
    }
 
@@ -115,9 +137,6 @@ public class AdminServices {
        teacherRepository.save(teacher);
    }
 
-   public void addSubjects(SubjectEntity subject){
-       subjectRepository.save(subject);
-   }
 
    public List<SubjectEntity> allSubjects(){
        List<SubjectEntity> subjectList= new ArrayList<>();
@@ -129,48 +148,21 @@ public class AdminServices {
        subjectRepository.deleteById(subjectId);
    }
 
-   public void addStudent(StudentEntity student){
-        studentRepository.save(student);
-   }
+    public void addNotification(NotificationEntity notification){
+        notificationRepository.save(notification);
+    }
 
-   public List<StudentEntity> fetchStudentList(){
-        List<StudentEntity> studentList= new ArrayList<>();
-        studentList=studentRepository.findAll();
-        return studentList;
-   }
+    public NotificationEntity searchNotification(String title){
+        NotificationEntity notification;
+        notification= notificationRepository.findByNotificationTitle(title);
+        return notification;
+    }
 
-   public StudentEntity fetchStudentById(int id){
-        StudentEntity student = studentRepository.findByStudentId(id);
-        return student;
-   }
-
-   public void removeStudent(int id){
-        studentRepository.deleteById(id);
-   }
-
-   public void updateFeesStatus(int id){
-        StudentEntity student= studentRepository.findByStudentId(id); //fetching student object by its id
-        student.setFeesPaid(true);  //updating fees status in student obj (local not in table)
-        studentRepository.save(student); //updating in table
-   }
-
-   public List<StudentEntity> fetchStudentBatch(String batchId){
-        List<StudentEntity> studentBatch = new ArrayList<> ();
-        studentBatch = studentRepository.findByBatchId(batchId);
-        return studentBatch;
-   }
-
-   public void addExamSchedule(List<ExamScheduleEntity> examSchedule){
-        for(int i=0; i<examSchedule.size(); i++){
-            examScheduleRepository.save(examSchedule.get(i));
-        }
-   }
-
-   public List<ExamScheduleEntity> fetchExamSchedule(String batchId){
-        List<ExamScheduleEntity> schedule = new ArrayList <> ();
-        schedule = examScheduleRepository.findByExamSchedule(batchId);
-        return schedule;
-   }
+    public List<NotificationEntity> showAllNotifications(){
+        List<NotificationEntity> notifications = new ArrayList<>();
+        notifications= notificationRepository.findAll();
+        return notifications;
+    }
 
 
 }

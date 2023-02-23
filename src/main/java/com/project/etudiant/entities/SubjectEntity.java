@@ -1,8 +1,7 @@
 package com.project.etudiant.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -13,10 +12,16 @@ import org.hibernate.annotations.DynamicUpdate;
 @NoArgsConstructor
 @DynamicUpdate
 @Entity
+@Transactional
 public class SubjectEntity {
     @Id
+    @Column(name = "subject_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "subject_id_generator")
+    @SequenceGenerator(name = "subject_id_generator", initialValue = 1000, allocationSize = 2, sequenceName= "subject_id_table")
     int subjectId;
 
     @NonNull
     String subjectName;
+
 }
+

@@ -13,7 +13,8 @@ import org.hibernate.annotations.DynamicUpdate;
 @NoArgsConstructor
 public class NotificationEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notification_id_generator")
+    @SequenceGenerator(name = "notification_id_generator", initialValue = 1, allocationSize = 1)
     int notificationId;
     @NonNull
     String notificationTitle;

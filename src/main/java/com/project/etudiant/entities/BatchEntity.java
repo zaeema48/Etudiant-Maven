@@ -1,22 +1,23 @@
 package com.project.etudiant.entities;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NonNull;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.util.List;
+
 @Entity
 @Table(name = "BatchTable")
 @Data
 @DynamicUpdate
+@Transactional
 public class BatchEntity {
 
-  @Column(name = "BatchID")
+  @Column(name = "batch_id")
   @Id
   String batchId;
   @NonNull
@@ -28,10 +29,20 @@ public class BatchEntity {
   @NonNull
   String feesAmount;
 
-  String scheduleId;
-
   @NonNull
   String currentSemester;
+
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "batch_id",referencedColumnName = "batch_id")
+  List<ScheduleEntity> scheduleList;
+
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "batch_id",referencedColumnName = "batch_id")
+  List<ExamScheduleEntity> examScheduleList;
+
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "batch_id",referencedColumnName = "batch_id")
+  List<StudentEntity> studentList;
 
   public BatchEntity() {
     batchId = null;

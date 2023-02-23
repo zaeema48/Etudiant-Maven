@@ -1,19 +1,25 @@
 package com.project.etudiant.entities;
 
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.hibernate.annotations.DynamicUpdate;
+
+import java.util.List;
 
 @Entity
 @Table(name = "Teacher_table")
 @Data
 @DynamicUpdate
 @NoArgsConstructor
+@Transactional
 public class TeacherEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "teacher_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "teacher_id_generator")
+    @SequenceGenerator(name = "teacher_id_generator", initialValue = 500, allocationSize = 2, sequenceName= "teacher_id_table")
     int teacherId;
 
     @NonNull
@@ -23,9 +29,14 @@ public class TeacherEntity {
     String teacherName;
 
     @NonNull
-    String subject;
-
-    @NonNull
     String salary;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "subject_id")
+    SubjectEntity subject;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "teacher_id",referencedColumnName = "teacher_id")
+    List<TeacherScheduleEntity> teacherSchedule;
 
 }
