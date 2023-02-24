@@ -7,7 +7,7 @@ import lombok.NonNull;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
-@Table(name = "TeacherSchedule")
+@Table(name = "teacher_schedule")
 @Data
 @NoArgsConstructor
 @DynamicUpdate

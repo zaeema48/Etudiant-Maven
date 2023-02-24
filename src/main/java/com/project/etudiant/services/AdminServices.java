@@ -11,28 +11,23 @@ import java.util.List;
 @Service
 public class AdminServices {
     @Autowired
+    AdminRepository adminRepository;
+    @Autowired
     BatchRepository batchRepository;
-
     @Autowired
     ScheduleRepository scheduleRepository;
-
-    @Autowired
-    NotificationRepository notificationRepository;
-
-    @Autowired
-    TeacherRepository teacherRepository;
-
-    @Autowired
-    SubjectRepository subjectRepository;
-
-    @Autowired
-    AdminRepository adminRepository;
-
     @Autowired
     StudentRepository studentRepository;
-
+    @Autowired
+    TeacherRepository teacherRepository;
+    @Autowired
+    SubjectRepository subjectRepository;
+    @Autowired
+    TeacherScheduleRepository teacherScheduleRepository;
     @Autowired
     ExamScheduleRepository examScheduleRepository;
+    @Autowired
+    NotificationRepository notificationRepository;
 
     //This method is checking whether admin exists or not/ whether password is correct or not
     public void adminLogin(String adminId, String password){
@@ -45,9 +40,9 @@ public class AdminServices {
     }
 
     public void addAdmin(AdminEntity admin){
-
         adminRepository.save(admin);
     }
+
    public void addBatch(BatchEntity batch){
        batch.setBatchId(batch.getCourseName()+batch.getCourseYear());
        batchRepository.save(batch);
@@ -65,24 +60,18 @@ public class AdminServices {
        return batch;
    }
 
-   public void updateSchedule(String batchId, ScheduleEntity schedule){
+   public void updateBatchSchedule(String batchId, ScheduleEntity schedule){
         String day=schedule.getDay();
         ScheduleEntity schedule1=scheduleRepository.findByBatchIdAndDay(batchId,day);
         schedule.setScheduleId(schedule1.getScheduleId());
         scheduleRepository.save(schedule);
    }
-    public void addStudent(String batchId,StudentEntity student){
+
+    public void addStudent(String batchId,List<StudentEntity> students){
         BatchEntity batch=batchRepository.findByBatchId(batchId);
         List<StudentEntity> studentList=batch.getStudentList();
-        studentList.add(student);
-//        studentRepository.saveAll(studentList);
+        studentList.addAll(students);
         batchRepository.save(batch);
-    }
-
-    public List<StudentEntity> fetchStudentList(){
-        List<StudentEntity> studentList= new ArrayList<>();
-        studentList=studentRepository.findAll();
-        return studentList;
     }
 
     public StudentEntity fetchStudentById(int id){
@@ -100,16 +89,10 @@ public class AdminServices {
         studentRepository.save(student); //updating in table
     }
 
-    public List<StudentEntity> fetchStudentBatch(String batchId){
-        List<StudentEntity> studentBatch = new ArrayList<> ();
-        studentBatch = studentRepository.findByBatchId(batchId);
-        return studentBatch;
-    }
-
-    public void addExamSchedule(List<ExamScheduleEntity> examSchedule){
-        for(int i=0; i<examSchedule.size(); i++){
-            examScheduleRepository.save(examSchedule.get(i));
-        }
+    public void addExamSchedule(String batchId,List<ExamScheduleEntity> examSchedule){
+        BatchEntity batch=batchRepository.findByBatchId(batchId);
+        batch.setExamScheduleList(examSchedule);
+        batchRepository.save(batch);
     }
 
     public List<ExamScheduleEntity> fetchExamSchedule(String batchId){
@@ -131,21 +114,23 @@ public class AdminServices {
        teacherRepository.deleteById(teacherId);
    }
 
+   public void updateTeacherSchedule(int teacherId,TeacherScheduleEntity teacherSchedule){
+        String day=teacherSchedule.getDay();
+        TeacherScheduleEntity teacherSchedule1=teacherScheduleRepository.findByBatchIdAndDay(teacherId,day);
+        teacherSchedule.setScheduleId(teacherSchedule1.getScheduleId());
+        teacherScheduleRepository.save(teacherSchedule);
+   }
+
    public void updateTeacherSalary(int teacherId, String salary){
        TeacherEntity teacher=teacherRepository.findByTeacherId(teacherId);
        teacher.setSalary(salary);
        teacherRepository.save(teacher);
    }
 
-
    public List<SubjectEntity> allSubjects(){
        List<SubjectEntity> subjectList= new ArrayList<>();
        subjectList=subjectRepository.findAll();
        return subjectList;
-   }
-
-   public void removeSubject(int subjectId){
-       subjectRepository.deleteById(subjectId);
    }
 
     public void addNotification(NotificationEntity notification){
@@ -163,6 +148,5 @@ public class AdminServices {
         notifications= notificationRepository.findAll();
         return notifications;
     }
-
 
 }

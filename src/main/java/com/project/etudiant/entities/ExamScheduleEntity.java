@@ -15,7 +15,7 @@ public class ExamScheduleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exam_id_generator")
     @SequenceGenerator(name = "exam_id_generator", initialValue = 8000, allocationSize = 7, sequenceName= "exam_id_table")
-    String examId;
+    int examId;
 
     @NonNull
     String date;
